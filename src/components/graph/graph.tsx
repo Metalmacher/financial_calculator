@@ -27,7 +27,6 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
   const plansByResult = profilesSeries.sort(
     (a, b) => b.data[b.data.length - 1] - a.data[a.data.length - 1]
   );
-  debugger;
   const bestPlan = plansByResult[0];
   return (
     <>
