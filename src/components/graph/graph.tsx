@@ -45,7 +45,6 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
             label: p.name,
             color: p.color,
           }))}
-          width={1200}
           height={300}
         />
         <Box className="summary">
