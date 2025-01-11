@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Financial Plan Comparison</h1>
+    </header>
+    <main>
+        <ul id="profile-list"></ul>
+        <form id="profile-form">
+            <label>
+                Profile Name: <input type="text" id="profile-name" required>
+            </label>
+            <label>
+                Profile Color: <input type="color" id="profile-color" required>
+            </label>
+            <button type="submit">Add Profile</button>
+        </form>
+        <canvas id="portfolio-chart" width="800" height="400"></canvas>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+

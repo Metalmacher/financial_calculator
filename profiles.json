@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Mortgage Plan",
+        "color": "#ff0000",
+        "startingAmount": 250000,
+        "monthlyContribution": 6000,
+        "annualGrowthRate": 0.05
+    }
+]
+
