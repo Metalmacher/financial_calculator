@@ -8,7 +8,7 @@ export const calculatePortfolioGrowthPerYear = (
 ) => {
   const startingAmount = new Big(profile.startingAmount);
   const monthlyContributionBase = new Big(profile.monthlyContribution);
-  annualGrowthRate = new Big(annualGrowthRate);
+  annualGrowthRate = new Big(annualGrowthRate).div(100);
   const totalMonths = totalYears * 12;
   const monthlyGrowthRate = annualGrowthRate.div(12);
 

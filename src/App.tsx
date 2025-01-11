@@ -14,7 +14,7 @@ function App() {
     initialProfiles as Profile[]
   );
   const [totalYears, setTotalYears] = useState(20);
-  const [annualGrowthRate, setAnnualGrowthRate] = useState(0.05);
+  const [annualGrowthRate, setAnnualGrowthRate] = useState(5);
   const setTotalYearsDeb = debouncedMethod(setTotalYears, 500);
   const setAnnualGrowthRateDeb = debouncedMethod(setAnnualGrowthRate, 500);
 
@@ -52,7 +52,17 @@ function App() {
                 customInput={TextField}
                 thousandSeparator
                 variant="standard"
+                max={100}
+                min={1}
+                prefix="% "
                 label="annual Growth Rate"
+                isAllowed={(values) => {
+                  const { floatValue } = values;
+                  return (
+                    floatValue === undefined ||
+                    (floatValue >= 1 && floatValue <= 100)
+                  );
+                }}
                 slotProps={{
                   input: {
                     style: { fontSize: "20px" }, // Change input text font size
