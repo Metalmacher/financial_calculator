@@ -83,7 +83,6 @@ export const ProfileList: React.FC<ProfileListProps> = ({
     field: keyof Profile,
     loanField?: keyof Loan
   ) => {
-    debugger;
     if (currentProfile) {
       if (loanField) {
       }
