@@ -26,7 +26,10 @@
     "baseUrl": ".",
     "paths": {
       "@data": ["src/data/"],
-      "@hooks": ["src/hooks/"]
+      "@hooks": ["src/hooks/"],
+      "@utils": ["src/utils/"],
+      "@interfaces": ["src/interfaces/"],
+      "@components": ["src/components/"],
     }
   },
   "include": ["src"]

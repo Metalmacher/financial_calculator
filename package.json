@@ -17,13 +17,17 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^6.3.1",
     "@mui/x-charts": "^7.23.6",
+    "big.js": "^6.2.2",
+    "mui-color-input": "^5.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-number-format": "^5.4.3",
+    "react-transition-group": "^4.4.5",
     "recharts": "^2.15.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/big.js": "^6.2.2",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

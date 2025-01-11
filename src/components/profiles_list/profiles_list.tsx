@@ -10,67 +10,73 @@ import {
   Checkbox,
 } from "@mui/material";
 import { NumericFormat } from "react-number-format";
-import { initialProfiles } from "@data";
-import { useLocalStorage } from "@hooks";
+import { MuiColorInput } from "mui-color-input";
+import { getBackground } from "@utils";
+import { Loan, Profile, shekelSign } from "@interfaces";
 
-const shekelSign = "₪";
-interface Loan {
-  monthlyPayout: number;
-  months: number;
-}
 const defaultLoan: Loan = {
   monthlyPayout: 4665.93, //prime + 1.5% (around 7.5% total interest)
   months: 36,
 };
-interface Profile {
-  name: string;
-  startingAmount: number;
-  monthlyContribution: number;
-  annualGrowthRate: number;
-  totalYears: number;
-  loan?: Loan;
-  // You can add more properties as needed
-}
 const defaultProfile: Profile = {
   name: "My Profile",
   startingAmount: 600_000,
   monthlyContribution: 8000,
   annualGrowthRate: 0.05,
-  totalYears: 20,
+  color: "#000000",
 };
+interface ProfileListProps {
+  callback: (profiles: Profile[]) => void;
+  profiles: Profile[];
+}
 
-const ProfileList: React.FC = () => {
+export const ProfileList: React.FC<ProfileListProps> = ({
+  profiles,
+  callback,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentProfile, setCurrentProfile] = useState<Profile | null>(null);
-  const [profiles, setProfiles] = useLocalStorage(
-    "profiles",
-    initialProfiles as Profile[]
+  const [currentProfileIndex, setCurrentProfileIndex] = useState<number | null>(
+    null
   );
-  const openModal = (profile: Profile) => {
+
+  const openModal = (profile: Profile, profileIndex: number | null) => {
     setCurrentProfile(profile);
+    setCurrentProfileIndex(profileIndex);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentProfile(null);
+    setCurrentProfileIndex(null);
   };
 
+  const handleNewProfile = () => {
+    openModal({ ...defaultProfile }, null);
+  };
   const handleSave = () => {
     if (currentProfile) {
       //do stuff
-      debugger;
-      setProfiles(profiles);
+      if (currentProfileIndex !== null) {
+        profiles[currentProfileIndex] = currentProfile;
+      } else {
+        profiles.push(currentProfile);
+      }
+      const newProfiles = [...profiles];
+      callback(newProfiles);
       closeModal();
     }
   };
 
   const handleDelete = () => {
-    if (currentProfile) {
+    if (currentProfileIndex !== null) {
       //do stuff
-      setProfiles(profiles);
-      closeModal();
+      profiles.splice(currentProfileIndex, 1);
+      const newProfiles = [...profiles];
+      callback(newProfiles);
     }
+    closeModal();
   };
 
   const handleInputChange = (
@@ -87,7 +93,9 @@ const ProfileList: React.FC = () => {
           ? {
               [field]: (e as any).floatValue
                 ? (e as any).floatValue
-                : e.target.value,
+                : e.target?.value != null
+                ? e.target?.value
+                : e,
             }
           : {
               loan: {
@@ -116,19 +124,37 @@ const ProfileList: React.FC = () => {
 
   return (
     <div className="profileListContainer">
-      <h2>Profiles</h2>
-      <ul className="profileList">
-        {profiles.map((profile) => (
-          <li className="profileListItem" key={profile.name}>
+      <Box className="profileMain">
+        <Box className="profileListBox">
+          <h2>Profiles</h2>
+          <ul className="profileList">
+            {profiles.map((profile, index) => (
+              <li className="profileListItem" key={profile.name}>
+                <Button
+                  className="profileButton"
+                  onClick={() => openModal(profile, index)}
+                  sx={{
+                    backgroundColor: profile.color,
+                    color: getBackground(profile.color),
+                  }}
+                >
+                  {profile.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
+          <hr />
+          <Box>
             <Button
-              className="profileButton"
-              onClick={() => openModal(profile)}
+              variant="contained"
+              color="success"
+              onClick={handleNewProfile}
             >
-              {profile.name}
+              Create new profile
             </Button>
-          </li>
-        ))}
-      </ul>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Modal for editing the profile */}
       <Modal
@@ -158,6 +184,21 @@ const ProfileList: React.FC = () => {
                   value={currentProfile.name}
                   onChange={(e: any) => handleInputChange(e, "name")}
                   variant="standard"
+                />
+              </div>
+              <div>
+                <FormControlLabel
+                  className="profileColor"
+                  labelPlacement="top"
+                  control={
+                    <MuiColorInput
+                      name="profileColor"
+                      format="hex"
+                      value={currentProfile.color}
+                      onChange={(e: any) => handleInputChange(e, "color")}
+                    />
+                  }
+                  label="Graph color"
                 />
               </div>
               <div>
@@ -200,16 +241,6 @@ const ProfileList: React.FC = () => {
                   prefix="% "
                   variant="standard"
                   label="Annual Growth Rate (%)"
-                />
-              </div>
-              <div>
-                <NumericFormat
-                  value={currentProfile.totalYears}
-                  onValueChange={(e: any) => handleInputChange(e, "totalYears")}
-                  customInput={TextField}
-                  fullWidth
-                  variant="standard"
-                  label="Total Years"
                 />
               </div>
               <div className="optional-loan-section">
@@ -260,14 +291,16 @@ const ProfileList: React.FC = () => {
                 >
                   Save
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleDelete}
-                  className="deleteButton"
-                >
-                  Delete
-                </Button>
+                {currentProfileIndex !== null && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleDelete}
+                    className="deleteButton"
+                  >
+                    Delete
+                  </Button>
+                )}
                 <Button
                   variant="text"
                   onClick={closeModal}
@@ -283,5 +316,3 @@ const ProfileList: React.FC = () => {
     </div>
   );
 };
-
-export default ProfileList;
