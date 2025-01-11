@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Mortgage Plan",
+    "startingAmount": 250000,
+    "monthlyContribution": 6000,
+    "annualGrowthRate": 0.05,
+    "isVisible": true,
+    "totalYears": 20
+  },
+  {
+    "id": 2,
+    "name": "No Mortgage Plan",
+    "startingAmount": 200000,
+    "monthlyContribution": 8000,
+    "annualGrowthRate": 0.05,
+    "isVisible": true,
+    "totalYears": 20
+  }
+]
