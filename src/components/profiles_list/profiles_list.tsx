@@ -22,7 +22,6 @@ const defaultProfile: Profile = {
   name: "My Profile",
   startingAmount: 600_000,
   monthlyContribution: 8000,
-  annualGrowthRate: 0.05,
   color: "#000000",
 };
 interface ProfileListProps {
@@ -227,20 +226,6 @@ export const ProfileList: React.FC<ProfileListProps> = ({
                   prefix={`${shekelSign} `}
                   variant="standard"
                   label="Monthly Contribution"
-                />
-              </div>
-              <div>
-                <NumericFormat
-                  value={currentProfile.annualGrowthRate}
-                  onValueChange={(e: any) =>
-                    handleInputChange(e, "annualGrowthRate")
-                  }
-                  customInput={TextField}
-                  fullWidth
-                  thousandSeparator
-                  prefix="% "
-                  variant="standard"
-                  label="Annual Growth Rate (%)"
                 />
               </div>
               <div className="optional-loan-section">

@@ -3,8 +3,6 @@
     "name": "3 Year Loan",
     "startingAmount": 250000,
     "monthlyContribution": 8000,
-    "annualGrowthRate": 0.05,
-    "totalYears": 20,
     "color": "#357f72",
     "loan": { "monthlyPayout": 4660, "months": 36 }
   },
@@ -12,17 +10,12 @@
     "name": "Mortgage Plan",
     "startingAmount": 250000,
     "monthlyContribution": 6000,
-    "annualGrowthRate": 0.05,
-    "isVisible": true,
-    "totalYears": 20,
     "color": "#912626"
   },
   {
     "name": "No loan",
     "startingAmount": 50000,
     "monthlyContribution": 8000,
-    "annualGrowthRate": 0.05,
-    "totalYears": 20,
     "color": "#a221de"
   }
 ]

@@ -3,13 +3,14 @@ import Big from "big.js";
 
 export const calculatePortfolioGrowthPerYear = (
   profile: Profile,
-  totalYears: number
+  totalYears: number,
+  annualGrowthRate: number | Big
 ) => {
   const startingAmount = new Big(profile.startingAmount);
   const monthlyContributionBase = new Big(profile.monthlyContribution);
-  const anualGrowthRate = new Big(profile.annualGrowthRate);
+  annualGrowthRate = new Big(annualGrowthRate);
   const totalMonths = totalYears * 12;
-  const monthlyGrowthRate = anualGrowthRate.div(12);
+  const monthlyGrowthRate = annualGrowthRate.div(12);
 
   let portfolio = startingAmount;
   const portfolioStats = [];

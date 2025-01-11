@@ -1,4 +1,14 @@
 .profilesGraph {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+
+.summary {
+  background-color: rgba(100, 100, 100, 0.1);
+  text-align: left;
+}
+
+.profileListItem {
+  font-size: 1.2em;
 }

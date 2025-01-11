@@ -14,7 +14,10 @@ function App() {
     initialProfiles as Profile[]
   );
   const [totalYears, setTotalYears] = useState(20);
+  const [annualGrowthRate, setAnnualGrowthRate] = useState(0.05);
   const setTotalYearsDeb = debouncedMethod(setTotalYears, 500);
+  const setAnnualGrowthRateDeb = debouncedMethod(setAnnualGrowthRate, 500);
+
   return (
     <>
       <Box>
@@ -41,6 +44,24 @@ function App() {
                   },
                 }}
               />
+              <NumericFormat
+                value={annualGrowthRate}
+                onValueChange={(e) =>
+                  setAnnualGrowthRateDeb(e.floatValue as number)
+                }
+                customInput={TextField}
+                thousandSeparator
+                variant="standard"
+                label="annual Growth Rate"
+                slotProps={{
+                  input: {
+                    style: { fontSize: "20px" }, // Change input text font size
+                  },
+                  inputLabel: {
+                    style: { fontSize: "20px" },
+                  },
+                }}
+              />
             </Box>
           </Box>
           <ProfileList
@@ -50,6 +71,7 @@ function App() {
           <ProfilesGraph
             profiles={profiles}
             totalYears={totalYears}
+            annualGrowthRate={annualGrowthRate}
           ></ProfilesGraph>
         </Box>
       </Box>
