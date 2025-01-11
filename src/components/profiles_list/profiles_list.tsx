@@ -83,6 +83,7 @@ export const ProfileList: React.FC<ProfileListProps> = ({
     field: keyof Profile,
     loanField?: keyof Loan
   ) => {
+    debugger;
     if (currentProfile) {
       if (loanField) {
       }
@@ -90,8 +91,8 @@ export const ProfileList: React.FC<ProfileListProps> = ({
         ...currentProfile,
         ...(!(loanField && currentProfile.loan)
           ? {
-              [field]: (e as any).floatValue
-                ? (e as any).floatValue
+              [field]: e.hasOwnProperty("floatValue")
+                ? (e as any).floatValue || 0
                 : e.target?.value != null
                 ? e.target?.value
                 : e,
@@ -99,8 +100,8 @@ export const ProfileList: React.FC<ProfileListProps> = ({
           : {
               loan: {
                 ...currentProfile.loan,
-                [loanField]: (e as any).floatValue
-                  ? (e as any).floatValue
+                [loanField]: e.hasOwnProperty("floatValue")
+                  ? (e as any).floatValue || 0
                   : e.target.value,
               },
             }),
