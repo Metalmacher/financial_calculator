@@ -84,8 +84,6 @@ export const ProfileList: React.FC<ProfileListProps> = ({
     loanField?: keyof Loan
   ) => {
     if (currentProfile) {
-      if (loanField) {
-      }
       const updatedProfile = {
         ...currentProfile,
         ...(!(loanField && currentProfile.loan)
