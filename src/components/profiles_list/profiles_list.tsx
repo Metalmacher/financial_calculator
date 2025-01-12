@@ -13,6 +13,7 @@ import { NumericFormat } from "react-number-format";
 import { MuiColorInput } from "mui-color-input";
 import { getBackground } from "@utils";
 import { Loan, Profile, shekelSign } from "@interfaces";
+import { AddCircle } from "@mui/icons-material";
 
 const defaultLoan: Loan = {
   monthlyPayout: 4665.93, //prime + 1.5% (around 7.5% total interest)
@@ -123,8 +124,9 @@ export const ProfileList: React.FC<ProfileListProps> = ({
     <div className="profileListContainer">
       <Box className="profileMain">
         <Box className="profileListBox">
-          <Typography variant="h4">Profiles</Typography>
-          <ul className="profileList">
+          <Typography variant="h4"><u>Profiles</u></Typography>
+          {!profiles.length ? (<Box>No profiles...</Box>) : (
+            <ul className="profileList">
             {profiles.map((profile, index) => (
               <li className="profileListItem" key={profile.name}>
                 <Button
@@ -140,12 +142,14 @@ export const ProfileList: React.FC<ProfileListProps> = ({
               </li>
             ))}
           </ul>
+          )}
           <hr />
           <Box>
             <Button
               variant="contained"
               color="success"
               onClick={handleNewProfile}
+              endIcon={<AddCircle />}
             >
               Create new profile
             </Button>

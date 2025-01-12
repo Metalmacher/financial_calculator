@@ -38,7 +38,7 @@ function App() {
         <Box className="appBody">
           <Box className="globalSettingsBg">
             <Box className="globalSettings">
-              <Typography variant="h4">Settings</Typography>
+              <Typography variant="h4"><u>Settings</u></Typography>
               <Box className="globalSettingsFields">
                 <Box className="settingsLeft">
                 <NumericFormat

@@ -49,7 +49,9 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
   return (
     <>
       <Box className="profilesGraphContainer">
-        <Box className="profilesGraph">
+        {!profilesSeries.length ? (<Box>No profiles...</Box>) : (
+          <Box>
+          <Box className="profilesGraph">
           <LineChart
             xAxis={[
               {
@@ -127,6 +129,8 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
             ))}
           </ol>
         </Box>
+        </Box>
+        )}
       </Box>
     </>
   );
