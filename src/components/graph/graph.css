@@ -19,9 +19,14 @@
     margin: 0 auto !important;
     transform: translateY(-15px);
 }
+.summaryBg {
+    background-color: rgba(100, 100, 100, 0.1);
+    padding: 10px;
+}
 .summary {
-  background-color: rgba(100, 100, 100, 0.1);
-  text-align: left;
+    max-width: 750px;
+    margin: auto;
+    text-align: left;
 }
 
 .profileListItem {

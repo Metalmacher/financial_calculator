@@ -13,7 +13,7 @@ import { NumericFormat } from "react-number-format";
 import { MuiColorInput } from "mui-color-input";
 import { getBackground } from "@utils";
 import { Loan, Profile, shekelSign } from "@interfaces";
-import { AddCircle } from "@mui/icons-material";
+import AddCircle from "@mui/icons-material/AddCircle";
 
 const defaultLoan: Loan = {
   monthlyPayout: 4665.93, //prime + 1.5% (around 7.5% total interest)

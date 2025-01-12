@@ -1,5 +1,5 @@
 import "./App.css";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material";
 import { ProfileList, ProfilesGraph } from "@components";
 import { useLocalStorage } from "@hooks";
 import { Profile, ProfilesSummary } from "@interfaces";
@@ -72,6 +72,7 @@ function App() {
                   customInput={TextField}
                   thousandSeparator
                   variant="standard"
+                  sx={{ width: '10ch' }}
                   label="Total Years"
                   slotProps={{
                     input: {
@@ -80,6 +81,11 @@ function App() {
                     inputLabel: {
                       style: { fontSize: "20px" },
                     },
+                    htmlInput: {
+                        type: "number",
+                        min: 1,
+                        max:80
+                    }
                   }}
                 />
                 <TextField
@@ -89,15 +95,25 @@ function App() {
                   }
                   variant="standard"
                   prefix="% "
+                  type="number"
+                  sx={{width: '10ch' }}
                   label="Annual Growth Rate"
                   slotProps={{
                     input: {
                       style: { fontSize: "20px" }, // Change input text font size
-                      type: "number"
+                      type: "number",
+                      startAdornment: <InputAdornment position="start">%</InputAdornment>
                     },
                     inputLabel: {
-                      style: { fontSize: "20px" },
+                      style: { 
+                        fontSize: "20px",
+                        overflow: "visible"
                     },
+                    },
+                    htmlInput: {
+                        min: 0,
+                        max: 100
+                    }
                   }}
                 />
                 </Box>

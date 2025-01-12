@@ -91,7 +91,9 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
               sx={{ mt: 2 }}
           />
         </Box>
+        <Box className="summaryBg">
         <Box className="summary">
+          <Typography variant="h4"><u>Summary</u></Typography>
           <Typography variant="h5">
             The best plan is{" "}
             <u
@@ -129,6 +131,7 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
               </li>
             ))}
           </ol>
+        </Box>
         </Box>
         </Box>
         )}
