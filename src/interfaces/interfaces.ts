@@ -11,3 +11,12 @@ export interface Profile {
   loan?: Loan;
   // You can add more properties as needed
 }
+
+export interface ProfileSeries {
+    data: number[];
+    name: string;
+    startingAmount: number;
+    monthlyContribution: number;
+    color: string;
+    loan?: Loan;
+}

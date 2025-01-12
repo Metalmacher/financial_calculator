@@ -123,7 +123,7 @@ export const ProfileList: React.FC<ProfileListProps> = ({
     <div className="profileListContainer">
       <Box className="profileMain">
         <Box className="profileListBox">
-          <h2>Profiles</h2>
+          <Typography variant="h4">Profiles</Typography>
           <ul className="profileList">
             {profiles.map((profile, index) => (
               <li className="profileListItem" key={profile.name}>
@@ -249,7 +249,7 @@ export const ProfileList: React.FC<ProfileListProps> = ({
                       thousandSeparator
                       prefix={`${shekelSign} `}
                       variant="standard"
-                      label="Monthly Payout"
+                      label="Monthly Loan Deduction"
                     />
                     <NumericFormat
                       value={currentProfile.loan.months || ""}

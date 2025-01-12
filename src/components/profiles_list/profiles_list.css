@@ -1,12 +1,11 @@
 /* Container for the profile list */
 .profileListContainer {
-  padding: 20px;
+  padding: 0 1em;
 }
 
 .profileMain {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
 }
 
 .profileListBox {

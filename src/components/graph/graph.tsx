@@ -1,52 +1,93 @@
-import { Profile, shekelSign } from "@interfaces";
+import React from "react";
+import { ProfileSeries, shekelSign } from "@interfaces";
 import "./graph.css";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Slider } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
-import { calculatePortfolioGrowthPerYear, getBackground } from "@utils";
+import { getBackground } from "@utils";
+import { useLocalStorage } from "src/hooks";
 
 interface ProfilesGraphProps {
-  profiles: Profile[];
+  profilesSeries: ProfileSeries[];
   totalYears: number;
   annualGrowthRate: number;
 }
 
 export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
-  profiles,
+  profilesSeries,
   totalYears,
-  annualGrowthRate,
 }) => {
-  const profilesSeries = profiles.map((profile) => ({
-    ...profile,
-    data: calculatePortfolioGrowthPerYear(
-      profile,
-      totalYears,
-      annualGrowthRate
-    ),
-  }));
   const currentYear = new Date().getFullYear();
+  const minDistance = 1;
+  const defaultRange = [currentYear, currentYear + totalYears];
+  const [range, setRange] = useLocalStorage("graphRange", [...defaultRange]);
+  const handleSliderChange = (
+    _event: Event,
+    newValue: number | number[],
+    activeThumb: number,
+  ) => {
+      if (!Array.isArray(newValue)) {
+        return;
+      }
+      if (newValue[1] - newValue[0] < minDistance) {
+        if (activeThumb === 0) {
+          setRange([newValue[0] - minDistance, newValue[1]]);
+        } else {
+          setRange([newValue[0], newValue[1] + minDistance]);
+        }
+      } else {
+        setRange(newValue as number[]);
+      }
+  }
+  const rangedProfiles = profilesSeries.map(x => 
+      x.data.slice(range[0] - currentYear, (range[0] - currentYear) + (range[1] - range[0]) + 1));
+  const min = Math.min(...rangedProfiles.map(x => [...x].shift() as number));
+  const max = Math.max(...rangedProfiles.map(x => [...x].pop() as number));
   const plansByResult = profilesSeries.sort(
     (a, b) => b.data[b.data.length - 1] - a.data[a.data.length - 1]
   );
   const bestPlan = plansByResult[0];
   return (
     <>
-      <Box className="profilesGraph">
-        <LineChart
-          xAxis={[
-            {
-              data: Array.from(
-                { length: totalYears + 1 },
-                (_v, k) => currentYear + k
-              ),
-            },
-          ]}
-          series={profilesSeries.map((p) => ({
-            data: p.data,
-            label: p.name,
-            color: p.color,
-          }))}
-          height={300}
-        />
+      <Box className="profilesGraphContainer">
+        <Box className="profilesGraph">
+          <LineChart
+            xAxis={[
+              {
+                data: Array.from(
+                  { length: totalYears + 1 },
+                  (_v, k) => currentYear + k
+                ),
+                min: range[0],
+                max: range[1],
+                tickMinStep: 1
+              },
+            ]}
+            yAxis={[{
+              min: Math.max(min - (max - min)*0.2, 0),
+              max: max + (max - min)*0.2
+            }]}
+            series={profilesSeries.map((p) => ({
+              data: p.data,
+              label: p.name,
+              color: p.color,
+            }))}
+            margin={{
+              left: 75
+            }}
+            height={300}
+          />
+          <Slider
+              className="rangeSelector"
+              value={range}
+              onChange={handleSliderChange}
+              valueLabelDisplay="auto"
+              min={defaultRange[0]}
+              max={defaultRange[1]}
+              marks
+              disableSwap
+              sx={{ mt: 2 }}
+          />
+        </Box>
         <Box className="summary">
           <Typography variant="h5">
             The best plan is{" "}
