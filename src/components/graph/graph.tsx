@@ -1,5 +1,5 @@
-import React from "react";
-import { ProfileSeries, shekelSign } from "@interfaces";
+import React, { useEffect } from "react";
+import { ProfilesSummary, shekelSign } from "@interfaces";
 import "./graph.css";
 import { Box, Typography, Slider } from "@mui/material";
 import { LineChart } from "@mui/x-charts";
@@ -7,17 +7,15 @@ import { getBackground } from "@utils";
 import { useLocalStorage } from "src/hooks";
 
 interface ProfilesGraphProps {
-  profilesSeries: ProfileSeries[];
-  totalYears: number;
-  annualGrowthRate: number;
+  profilesSummary: ProfilesSummary;
 }
 
 export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
-  profilesSeries,
-  totalYears,
+  profilesSummary
 }) => {
   const currentYear = new Date().getFullYear();
   const minDistance = 1;
+  const {totalYears, profiles} = profilesSummary;
   const defaultRange = [currentYear, currentYear + totalYears];
   const [range, setRange] = useLocalStorage("graphRange", [...defaultRange]);
   const handleSliderChange = (
@@ -38,18 +36,21 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
         setRange(newValue as number[]);
       }
   }
-  const rangedProfiles = profilesSeries.map(x => 
+  useEffect(() => {
+    setRange([...defaultRange]);
+  },[profilesSummary])
+  const rangedProfiles = profiles.map(x => 
       x.data.slice(range[0] - currentYear, (range[0] - currentYear) + (range[1] - range[0]) + 1));
   const min = Math.min(...rangedProfiles.map(x => [...x].shift() as number));
   const max = Math.max(...rangedProfiles.map(x => [...x].pop() as number));
-  const plansByResult = profilesSeries.sort(
+  const plansByResult = profiles.sort(
     (a, b) => b.data[b.data.length - 1] - a.data[a.data.length - 1]
   );
   const bestPlan = plansByResult[0];
   return (
     <>
       <Box className="profilesGraphContainer">
-        {!profilesSeries.length ? (<Box>No profiles...</Box>) : (
+        {!profiles.length ? (<Box>No profiles...</Box>) : (
           <Box>
           <Box className="profilesGraph">
           <LineChart
@@ -68,7 +69,7 @@ export const ProfilesGraph: React.FC<ProfilesGraphProps> = ({
               min: Math.max(min - (max - min)*0.2, 0),
               max: max + (max - min)*0.2
             }]}
-            series={profilesSeries.map((p) => ({
+            series={profiles.map((p) => ({
               data: p.data,
               label: p.name,
               color: p.color,

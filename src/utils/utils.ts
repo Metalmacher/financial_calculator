@@ -26,8 +26,10 @@ export const debouncedMethod = <T, Args extends any[]>(
   return (...args: Args) =>
     new Promise<T>((res) => {
       if (timeoutID) {
+        console.log("timeout exists!");
         clearTimeout(timeoutID);
       }
+      console.log("creating timeout!");
       timeoutID = setTimeout(() => res(callback(...args)), debounce);
     });
 };

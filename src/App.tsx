@@ -2,11 +2,12 @@ import "./App.css";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { ProfileList, ProfilesGraph } from "@components";
 import { useLocalStorage } from "@hooks";
-import { Profile, ProfileSeries } from "@interfaces";
+import { Profile, ProfilesSummary } from "@interfaces";
 import { initialProfiles } from "@data";
 import RestoreIcon from '@mui/icons-material/Restore';
 import { NumericFormat } from "react-number-format";
 import { calculatePortfolioGrowthPerYear, debouncedMethod } from "@utils";
+import { useCallback, useEffect, useState } from "react";
 
 function App() {
   const [profiles, setProfiles] = useLocalStorage(
@@ -15,20 +16,44 @@ function App() {
   );
   const [totalYears, setTotalYears] = useLocalStorage("totalYears", 20);
   const [annualGrowthRate, setAnnualGrowthRate] = useLocalStorage("annualGrowthRate", 5);
-  const setTotalYearsDeb = debouncedMethod(setTotalYears, 500);
-  const setAnnualGrowthRateDeb = debouncedMethod(setAnnualGrowthRate, 500);
+  const calcProfilesSummary = function (profiles: Profile[], totalYears: number, annualGrowthRate: number) {
+    return {
+        totalYears,
+        annualGrowthRate,
+        profiles: profiles.map((profile) => ({
+            ...profile,
+            data: calculatePortfolioGrowthPerYear(
+              profile,
+              totalYears,
+              annualGrowthRate
+            ),
+          }))
+    } as ProfilesSummary;
+  }
+  const [profilesSummary, setProfilesSummary] = useState<ProfilesSummary>(() => ({
+    totalYears,
+    annualGrowthRate,
+    profiles: profiles.map((profile) => ({
+        ...profile,
+        data: calculatePortfolioGrowthPerYear(
+          profile,
+          totalYears,
+          annualGrowthRate
+        ),
+      }))
+    }));
+  
+  const setProfilesSummaryDeb = useCallback(debouncedMethod((profiles: Profile[], totalYears: number, annualGrowthRate: number) => {
+    setProfilesSummary(calcProfilesSummary(profiles, totalYears, annualGrowthRate))
+  }, 200), []);
+
   const resetState = () => {
     localStorage.clear();
     window.location.reload();
   }
-  const profilesSeries: ProfileSeries[] = profiles.map((profile) => ({
-    ...profile,
-    data: calculatePortfolioGrowthPerYear(
-      profile,
-      totalYears,
-      annualGrowthRate
-    ),
-  }));
+  useEffect(() => {
+    setProfilesSummaryDeb(profiles, totalYears, annualGrowthRate);
+  }, [annualGrowthRate, totalYears, profiles]);
   return (
     <>
       <Box className="header">
@@ -43,7 +68,7 @@ function App() {
                 <Box className="settingsLeft">
                 <NumericFormat
                   value={totalYears}
-                  onValueChange={(e) => setTotalYearsDeb(e.floatValue as number)}
+                  onValueChange={(e) => setTotalYears(e.floatValue as number)}
                   customInput={TextField}
                   thousandSeparator
                   variant="standard"
@@ -57,28 +82,18 @@ function App() {
                     },
                   }}
                 />
-                <NumericFormat
+                <TextField
                   value={annualGrowthRate}
-                  onValueChange={(e) =>
-                    setAnnualGrowthRateDeb(e.floatValue as number)
+                  onChange={(e) =>
+                    setAnnualGrowthRate(parseInt(e.target.value) as number)
                   }
-                  customInput={TextField}
-                  thousandSeparator
                   variant="standard"
-                  max={100}
-                  min={1}
                   prefix="% "
-                  label="annual Growth Rate"
-                  isAllowed={(values) => {
-                    const { floatValue } = values;
-                    return (
-                      floatValue === undefined ||
-                      (floatValue >= 1 && floatValue <= 100)
-                    );
-                  }}
+                  label="Annual Growth Rate"
                   slotProps={{
                     input: {
                       style: { fontSize: "20px" }, // Change input text font size
+                      type: "number"
                     },
                     inputLabel: {
                       style: { fontSize: "20px" },
@@ -106,9 +121,7 @@ function App() {
           </Box>
           <Box className="graph">
             <ProfilesGraph
-                profilesSeries={profilesSeries}
-                totalYears={totalYears}
-                annualGrowthRate={annualGrowthRate}
+                profilesSummary={profilesSummary}
             ></ProfilesGraph>
           </Box>
         </Box>

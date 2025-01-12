@@ -20,3 +20,9 @@ export interface ProfileSeries {
     color: string;
     loan?: Loan;
 }
+
+export interface ProfilesSummary {
+    totalYears: number;
+    annualGrowthRate: number;
+    profiles: ProfileSeries[]
+}
